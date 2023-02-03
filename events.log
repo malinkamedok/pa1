@@ -1,0 +1,112 @@
+Process 1 (pid 49959, parent 49958) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 49960, parent 49958) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 50021, parent 50020) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 50022, parent 50020) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 50048, parent 50047) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 50049, parent 50047) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 50068, parent 50067) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 50069, parent 50067) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 50118, parent 50117) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 50119, parent 50117) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 50331, parent 50330) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 50332, parent 50330) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 50421, parent 50420) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 50422, parent 50420) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 50454, parent 50453) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 50455, parent 50453) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 50518, parent 50517) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 50519, parent 50517) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 2 (pid 50697, parent 50695) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 50696, parent 50695) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 51146, parent 51144) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 2 (pid 51197, parent 51195) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 2 (pid 51241, parent 51239) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 51240, parent 51239) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 51276, parent 51274) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
+Process 1 (pid 51275, parent 51274) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 1 (pid 51699, parent 51698) has STARTED
+Process 1 received all STARTED messages
+Process 1 has DONE its work
+Process 1 received all DONE messages
+Process 2 (pid 51700, parent 51698) has STARTED
+Process 2 received all STARTED messages
+Process 2 has DONE its work
+Process 2 received all DONE messages
