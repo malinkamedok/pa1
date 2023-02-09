@@ -3,11 +3,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
-#include <fcntl.h>
 #include "pa1.h"
 #include "pipes.h"
-
-
+#include "ipc.h"
+#include <fcntl.h>
 
 int main(int argc, char **argv) {
 
@@ -28,19 +27,19 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    struct pipes pipes_all[number_of_child_procs + 1][number_of_child_procs + 1];
-
     FILE *pi;
     pi = fopen("pipes.log", "a+");
 
     FILE *ev;
     ev = fopen("events.log", "a+");
 
+    pipes_all_global * global = new(number_of_child_procs+1);
+
     //pipes creation
     for (size_t i = 0; i < number_of_child_procs + 1; i++) {
         for (size_t j = 0; j < number_of_child_procs + 1; j++) {
             if (i != j) {
-                int result_pipe = pipe(pipes_all[i][j].fd);
+                int result_pipe = pipe(global->pipes_all[i][j].fd);
                 fprintf(pi, "pipe opened i: %zu j: %zu\n", i, j);
                 if (result_pipe == -1) {
                     return -1;
@@ -62,27 +61,30 @@ int main(int argc, char **argv) {
             for (size_t i = 0; i < number_of_child_procs+1; i++) {
                 for (size_t j = 0; j < number_of_child_procs+1; j++) {
                     if (i != j && i != process_number && j != process_number) {
-                        close(pipes_all[i][j].fd[0]);
-                        close(pipes_all[i][j].fd[1]);
-                        close(pipes_all[j][i].fd[0]);
-                        close(pipes_all[j][i].fd[1]);
+                        close(global->pipes_all[i][j].fd[0]);
+                        close(global->pipes_all[i][j].fd[1]);
+                        close(global->pipes_all[j][i].fd[0]);
+                        close(global->pipes_all[j][i].fd[1]);
                     }
                 }
             }
             for (size_t i = 0; i < number_of_child_procs+1; i++) {
                 if (i != process_number) {
-                    close(pipes_all[process_number][i].fd[0]);
-                    close(pipes_all[i][process_number].fd[1]);
+                    close(global->pipes_all[process_number][i].fd[0]);
+                    close(global->pipes_all[i][process_number].fd[1]);
                 }
             }
+            baby_maybe_process * babyMaybeProcess = new_baby(process_number, global);
 
             //SENDING STARTED MESSAGE
-            for (size_t j = 0; j < number_of_child_procs+1; j++) {
+            for (int8_t j = 0; j < number_of_child_procs+1; j++) {
                 if (process_number != j) {
                     char started_message[71];
                     sprintf(started_message, log_started_fmt, (int ) process_number, getpid(), getppid());
-                    write(pipes_all[process_number][j].fd[1], started_message, 71);
-                    printf("%d message printed in pipe i: %zu j: %zu\n", getpid(), process_number, j);
+//                    write(global->pipes_all[process_number][j].fd[1], started_message, 71);
+//                    baby_maybe_process * babyMaybeProcess = new_baby(process_number, global);
+                    send((void*)babyMaybeProcess, j, NULL);
+                    printf("%d message printed in pipe i: %zu j: %d\n", getpid(), process_number, j);
                 }
             }
 
@@ -93,8 +95,8 @@ int main(int argc, char **argv) {
                 if (i != process_number) {
                     char child_receive[71];
                     printf("reading from i: %zu, j: %zu\n", i, process_number);
-//                    fcntl(pipes_all[i][process_number].fd[0], F_SETFL, O_NONBLOCK);
-                    read(pipes_all[i][process_number].fd[0], child_receive, 71);
+                    fcntl(global->pipes_all[i][process_number].fd[0], F_SETFL, O_NONBLOCK);
+                    read(global->pipes_all[i][process_number].fd[0], child_receive, 71);
                     printf("child with pid %d received message: %s from proc #%zu\n", getpid(), child_receive, i);
                 }
             }
@@ -114,8 +116,8 @@ int main(int argc, char **argv) {
             //SENDING DONE MESSAGE
             for (size_t j = 0; j < number_of_child_procs + 1; j++) {
                 if (j != process_number) {
-                    write(pipes_all[process_number][j].fd[1], done_message, 71);
-                    close(pipes_all[process_number][j].fd[1]);
+                    write(global->pipes_all[process_number][j].fd[1], done_message, 71);
+                    close(global->pipes_all[process_number][j].fd[1]);
 //                    printf("pid %d, i: %zu, j: %zu DONE message printed\n", getpid(), i, j);
                 }
             }
@@ -128,9 +130,8 @@ int main(int argc, char **argv) {
                 if (i != process_number) {
                     char child_done_receive[71];
                     printf("reading from i: %zu, j: %zu\n", i, process_number);
-//                    fcntl(pipes_all[i][process_number].fd[0], F_SETFL, O_NONBLOCK);
-                    read(pipes_all[i][process_number].fd[0], child_done_receive, 71);
-                    close(pipes_all[i][process_number].fd[0]);
+                    read(global->pipes_all[i][process_number].fd[0], child_done_receive, 71);
+                    close(global->pipes_all[i][process_number].fd[0]);
                     printf("child with pid %d received message: %s from proc #%zu\n", getpid(), child_done_receive, i);
                 }
             }
@@ -147,17 +148,17 @@ int main(int argc, char **argv) {
     for (size_t i = 0; i < number_of_child_procs+1; i++) {
         for (size_t j = 0; j < number_of_child_procs+1; j++) {
             if (i != j && i != 0 && j != 0) {
-                close(pipes_all[i][j].fd[0]);
-                close(pipes_all[i][j].fd[1]);
-                close(pipes_all[j][i].fd[0]);
-                close(pipes_all[j][i].fd[1]);
+                close(global->pipes_all[i][j].fd[0]);
+                close(global->pipes_all[i][j].fd[1]);
+                close(global->pipes_all[j][i].fd[0]);
+                close(global->pipes_all[j][i].fd[1]);
             }
         }
     }
     for (size_t i = 0; i < number_of_child_procs+1; i++) {
         if (i != process_number) {
-            close(pipes_all[process_number][i].fd[0]);
-            close(pipes_all[i][process_number].fd[1]);
+            close(global->pipes_all[process_number][i].fd[0]);
+            close(global->pipes_all[i][process_number].fd[1]);
         }
     }
 
@@ -166,17 +167,15 @@ int main(int argc, char **argv) {
     //READING STARTED MESSAGE BY PARENT
     for (size_t i = 1; i < number_of_child_procs+1; i++) {
         char receive[71];
-//        fcntl(pipes_all[i][0].fd[0], F_SETFL, O_NONBLOCK);
-        read(pipes_all[i][0].fd[0], receive, 71);
+        read(global->pipes_all[i][0].fd[0], receive, 71);
         printf("parent received: %s from proc #%zu\n", receive, i);
     }
 
     //READING DONE MESSAGE BY PARENT
     for (size_t i = 1; i < number_of_child_procs+1; i++) {
         char done_receive[71];
-//        fcntl(pipes_all[i][0].fd[0], F_SETFL, O_NONBLOCK);
-        read(pipes_all[i][0].fd[0], done_receive, 71);
-        close(pipes_all[i][0].fd[0]);
+        read(global->pipes_all[i][0].fd[0], done_receive, 71);
+        close(global->pipes_all[i][0].fd[0]);
         printf("parent received: %s from proc #%zu\n", done_receive, i);
     }
 

@@ -1,4 +1,6 @@
 #include "ipc.h"
+#include "pipes.h"
+#include <unistd.h>
 
 /** Send a message to the process specified by id.
  *
@@ -8,7 +10,11 @@
  *
  * @return 0 on success, any non-zero value on error
  */
-int send(void * self, local_id dst, const Message * msg);
+int send(void * self, local_id dst, const Message * msg) {
+    baby_maybe_process * glb = (baby_maybe_process * ) self;
+    write(glb->global_elite->pipes_all[glb->id][dst].fd[1], "TRAHAL", 71);
+    return 0;
+}
 
 /** Send multicast message.
  *
